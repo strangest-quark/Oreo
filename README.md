@@ -1,2 +1,3 @@
 # Oreo
-A facebook messenger bot that takes in text messages and replies back the same with quirky emoticons
+A facebook messenger bot that takes in text messages and replies back the same with quirky emoticons.
+MADE IN LOVE WITH OREO
