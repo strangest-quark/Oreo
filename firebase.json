@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "public",
+
+    // Add the following rewrites section *within* "hosting"
+   "rewrites": [ {
+      "source": "/webhook", "function": "app"
+    } ],
+
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+}
+}
