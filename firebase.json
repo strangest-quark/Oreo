@@ -2,7 +2,7 @@
   "hosting": {
     "public": "public",
 
-    // Add the following rewrites section *within* "hosting"
+    // Add the following rewrites section *within* "hosting" sha also contributes :)
    "rewrites": [ {
       "source": "/webhook", "function": "app"
     } ],
