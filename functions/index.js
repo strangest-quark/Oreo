@@ -44,6 +44,7 @@ app.post('/webhook/', function(req, res) {
             entry.messaging.forEach(function(messagingObject) {
                 //6
                 var senderId = messagingObject.sender.id;
+                console.log
                 //7
                 if (messagingObject.message) {
                   //8
@@ -70,7 +71,14 @@ app.post('/webhook/', function(req, res) {
   });
 
   function queryDB(senderID, inMessage){
-    var arr = inMessage.split(" ");
+    //removes ? !
+    inMessage=inMessage.replace(/[?!,]/g, '').trim();
+    console.log(inMessage);
+    var arr = inMessage.split(/[\s]+/);
+    //removes undefined
+    arr = arr.filter(function( element ) {
+      return element !== undefined;
+   });
     console.log(arr);
     console.log('inside queryDB');
     // At first, use an array, so you can put back the asynchronous results in the correct order
@@ -80,7 +88,7 @@ app.post('/webhook/', function(req, res) {
     // Use LET to make loop variable block scoped: that way you'll have the same value for
     //   it when the asynchronous callback is called
     for(let i=0; i < arr.length; i++) {
-        var x = 'https://oreo-fd681.firebaseio.com/'+(arr[i].toLowerCase())+'.json';
+        var x = 'https://oreo-fd681.firebaseio.com/icons/'+(arr[i].toLowerCase())+'.json';
         request({
             url: x,
             method: 'GET'
@@ -95,13 +103,14 @@ app.post('/webhook/', function(req, res) {
                 // Treat the two cases with the ternary operator
                 //  and put the result at the correct index
                 if(response.body=='null'){
-                  console.log("inside null");
                   msgArray[i]=arr[i];
                 }
                 else{
-                  msgArray[i]=(JSON.parse(response.body)).key;
+                  //msgArray[i] =(JSON.parse(response.body)).key;
+                  var nr = eval("'" + (JSON.parse(response.body).key) + "'");
+                  //var nr = '\u{1F600}'
+                  msgArray[i]=nr;
                 }
-                console.log(msgArray);
                 // Detect when you have collected all results
                 leftOver--;
                 if (!leftOver) {
@@ -115,7 +124,7 @@ app.post('/webhook/', function(req, res) {
 
 function sendMessageToUser(senderId, message) {
     request({
-      url: 'https://graph.facebook.com/v2.6/me/messages?access_token=' + FACEBOOK_PAGE_ACCESS_TOKEN,
+      url: 'https://graph.facebook.com/v2.10/me/messages?access_token=' + FACEBOOK_PAGE_ACCESS_TOKEN,
       method: 'POST',
       json: {
         recipient: {
